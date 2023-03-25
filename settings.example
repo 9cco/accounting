@@ -1,0 +1,75 @@
+{
+    "mBTC" : 42.00,
+    "skip_regexes" : ["nettbank til:"],
+    "categories" : [
+        {
+            "name" : "education",
+            "regexes" : []
+        },
+        {
+            "name" : "electronics",
+            "regexes" : ["komplett\\.no", "proshop\\.no"]
+        },
+        {
+            "name" : "experiences",
+            "regexes" : ["www deltager no", "syng mer"]
+        },
+        {
+            "name" : "food_normal",
+            "regexes" : ["extra", "joker", "rema", "meny", "kiwi"]
+        },
+        {
+            "name" : "food_other",
+            "regexes" : ["deli de luca", "ris bolle thai", "sushi & dinner", "max burgers", "palazzo pizzeri thorvald", "bislett kebab", "pdt avd 301 majorst", "hrimnir ramen"]
+        },
+        {
+            "name" : "gifts",
+            "regexes" : []
+        },
+        {
+            "name" : "health",
+            "regexes" : []
+        },
+        {
+            "name" : "house_interior",
+            "regexes" : ["kremmerhuse"]
+        },
+        {
+            "name" : "housing",
+            "regexes" : []
+        },
+        {
+            "name" : "investments",
+            "regexes" : ["verdipapirhandel sbanken"]
+        },
+        {
+            "name" : "loan",
+            "regexes" : ["statens lånekasse for utdannin"]
+        },
+        {
+            "name" : "subscriptions",
+            "regexes" : []
+        },
+        {
+            "name" : "toiletries",
+            "regexes" : ["kicks"]
+        },
+        {
+            "name" : "transportation",
+            "regexes" : ["ruterappen"]
+        },
+        {
+            "name" : "vacation",
+            "regexes" : []
+        },
+        {
+            "name" : "wearables",
+            "regexes" : ["uff", "lindex", "urban pioneers", "cubus", "jack & jones", "zalando", "fretex", "foot locker"]
+        }
+    ],
+    "prompt" : "(^_^) >  ",
+    "consumption_commitment_categories" : [
+        "food_normal", "food_other", "transportation", "subscriptions", "housing", "loan", "health"
+    ],
+    "write_order" : ["education", "food_normal", "food_other", "experiences", "transportation", "health", "gifts", "subscriptions", "vacation", "electronics", "wearables", "toiletries", "housing", "investments", "house_interior", "loan"]
+}

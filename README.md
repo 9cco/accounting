@@ -18,7 +18,7 @@ The script then prints all the results to the console with some nice crushing of
 ## Installation
 
 1. Download the script folder.
-2. Edit the settings.conf json file by inserting the number of bitcoins in you possession, what categories you want and what search strings in each category, what categories should be considered consumption commitments, and specify skip regexes if any transactions should be automatically skipped (like internal tranfers between accounts).
+2. Edit the settings.conf json file by inserting the number of bitcoins in you possession, what categories you want and what search strings in each category, what categories should be considered consumption commitments, and specify skip regexes if any transactions should be automatically skipped (like internal tranfers between accounts). An example settings file is included in the file `settings.example`. Use this as a starting point and rename it to `settings.conf` when you are done.
 3. Add the line `alias accounting='python3 <path to script folder>/monthly_accounting.py'` to your `.bash_aliases` file (assuming you have the line `. ~/.bash_aliases` somewhere in your `.bashrc` file.
 
 In order to have the nice API-calls:

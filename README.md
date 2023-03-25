@@ -56,8 +56,8 @@ When manually categorizing transactions you are supposed to input the number of 
 
 The script requires python3
 
-**Python modules**
-Essentials:
+**Python modules**  
+Essentials:  
 - sys
 - os
 - json
@@ -67,14 +67,14 @@ Essentials:
 - datetime
 - matplotlib.pyplot
 
-To make the API-calls work we also need
+To make the API-calls work we also need  
 - oauthlib.oauth2
 - requests_oauthlib
 - requests
 - urllib.parse
 
-**Linux command**
-In order to show the plot and copy to clipboard, we use the linux commands
+**Linux command**  
+In order to show the plot and copy to clipboard, we use the linux commands  
 - cat
 - xclip
 - evince

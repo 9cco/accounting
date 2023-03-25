@@ -51,6 +51,33 @@ When manually categorizing transactions you are supposed to input the number of 
 -  p: Print category choices.
 -  h: Print all available choices.
 
+### Advanced usage
+
+```
+usage: monthly_accounting.py [-h] [-i <csv file>] [-p] [-e] [-s <json file-path>]
+                             [--income <csv file>]
+
+Categorize and generate financial figures for an individuals spending over a certain
+month. Do this by reading the account statements provided as a csv-file exported from
+Sbanken.
+
+options:
+  -h, --help            show this help message and exit
+  -i <csv file>, --import <csv file>
+                        Import expenses in <csv file> into categories and store them
+                        in an output json file named after the month-year (-s can be
+                        used to specify this).
+  -p, --print           Looks for a saved json file and only prints output (does not
+                        generate pdfs etc.)
+  -e, --export          Looks for an already saved json file and outputs the results
+                        in this file by creating plot, generating ouput csv file and
+                        copying its content to the clipboard.
+  -s <json file-path>, --save-file <json file-path>
+                        Specifies the name of the json-file used to save the results.
+  --income <csv file>   Imports the file in <csv file>, but instead of categorizing
+                        expenses, prints the income statements contained.
+```
+
 
 ### Requirements
 
@@ -79,4 +106,4 @@ In order to show the plot and copy to clipboard, we use the linux commands
 - xclip
 - evince
 
-So for the nice automation, these needs to be installed.
+So for the nice automation, these need to be installed.

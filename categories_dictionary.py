@@ -190,6 +190,8 @@ def printCategories(cats_dict):
 # Takes a list of transactions and prints a table of it with numbers giving the indices of the transactions
 # in the list.
 def printExpensesTable(trans_list):
+    if len(trans_list) <= 0:
+        raise Exception("ERROR: tried to print empty list.")
     # Create list of list to be used in the tabulate module
     data = [[i, trans['date_book'].strftime('%Y-%m-%d'), formatNumber(trans['out']), trans['text']] for i, trans in enumerate(trans_list)]
     headers = ["Number", "Date Booked", "Out", "Comment"]
@@ -212,20 +214,21 @@ def determineConsumptionCommitments(cats_dict, settings_dict):
         included_transactions = cat_dict['transactions'][:]
 
 
-        # Get user input on which transactions should be subtracted
-        print("Choose the numbers of any transactions below that should not be counted as consumption commitments.")
-        print("Press 'x' to confirm current choices")
-        printExpensesTable(included_transactions)
-        while True:
-            choice_str = input(prompt)
-            if choice_str == "x":
-                break
-            elif choice_str.isdigit() and int(choice_str) >= 0 and int(choice_str) < len(included_transactions):
-                # If the choice is valid: remove the element from the included list and place it in the excluded list.
-                excluded_transactions.append(included_transactions.pop(int(choice_str)))
-                printExpensesTable(included_transactions)
-            else:
-                print(f"Invalid choice '{choice_str}', please try again.")
+        if len(included_transactions) > 0:
+            # Get user input on which transactions should be subtracted
+            print("Choose the numbers of any transactions below that should not be counted as consumption commitments.")
+            print("Press 'x' to confirm current choices")
+            printExpensesTable(included_transactions)
+            while True:
+                choice_str = input(prompt)
+                if choice_str == "x":
+                    break
+                elif choice_str.isdigit() and int(choice_str) >= 0 and int(choice_str) < len(included_transactions):
+                    # If the choice is valid: remove the element from the included list and place it in the excluded list.
+                    excluded_transactions.append(included_transactions.pop(int(choice_str)))
+                    printExpensesTable(included_transactions)
+                else:
+                    print(f"Invalid choice '{choice_str}', please try again.")
 
         # Subtract the excluded transactions from the consumption commitments sum
         exclusion_sum = sum([transaction['out'] for transaction in excluded_transactions])

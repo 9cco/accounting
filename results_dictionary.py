@@ -302,7 +302,7 @@ def plotResults(results_dict, output_fn):
     cat_sums = [categories[cat_name]['sum_out'] for cat_name in cat_names]
 
     # Convert the date in the results to a datetime-object.
-    report_date = results_dict['date']
+    report_date = results_dict['end_date']
     date_string = report_date.strftime("%B %Y")
 
     # Set bar colors according to Okabe & Ito standards

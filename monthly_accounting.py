@@ -63,10 +63,10 @@ def advancedUsage(parser, settings_dict):
 
     cli_input = parser.parse_args()
 
-    credentials = loadCredentials()
 
     # First we encrypt and save credentials, if that was the point of the invocation
     if cli_input.encrypt:
+        credentials = loadCredentials()
         encryptCredentialsToFile(credentials)
         return
 
@@ -74,6 +74,8 @@ def advancedUsage(parser, settings_dict):
     no_results = False
     import_path = cli_input.imp
     if import_path != '' and import_path != None:
+
+        credentials = loadCredentials()
 
         print(f"Importing account information from {import_path}")
         results_dict, accounting_data = importResultsFromCSV(import_path, settings_dict, credentials)
@@ -109,6 +111,7 @@ def advancedUsage(parser, settings_dict):
         if save_path == '' or save_path == None:
             # If no path was given, try to find the file using the current date
             save_path = getSaveFileName()
+            eprint(f"Warning: no save-file specified. Attempting to load {save_path}")
 
         save_path = os.path.normpath(save_path)
         if os.path.isfile(save_path):
@@ -142,6 +145,10 @@ def advancedUsage(parser, settings_dict):
 
         if cli_input.export:
             exportResults(results_dict, settings_dict)
+
+    # If we have nothing to work with, but still want to do something we should print an error.
+    elif cli_input.pri or cli_input.export:
+        eprint("Couldn't find any results to output.")
     
     return
 

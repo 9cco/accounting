@@ -1,5 +1,6 @@
 import base64
 import argon2
+import math
 import sys
 import os
 import re
@@ -209,6 +210,46 @@ def decryptCredentialList(password, credz, params):
         cred.decryptCredential(password, params)
     return
 
+# Function finds the size of the alphabeth used by assuming conventional forms like [A-Z], [a-z], [0-9], etc.
+# and uses this to evaluate the bit complexity of the password. Uses this to give the password an adjective
+# from the list: terribly weak, weak, ok, strong, very strong, insanely paranoid
+def evaluatePassword(password):
+    adjective = 'weak'
+    bits = 10
+    string_length = len(password)
+    alpha_size = 0
+
+    if re.search(r'[a-z]', password):
+        alpha_size += 26
+    if re.search(r'[A-Z]', password):
+        alpha_size += 26
+    if re.search(r'[0-9]', password):
+        alpha_size += 10
+
+    # Remove all characters of the above alphabets from password.
+    aux_string = re.sub(r'[A-Za-z0-9]', "", password)
+    # Count the number of distinct characters not in the above ranges.
+    extra_chars = len(set(aux_string))
+    alpha_size += extra_chars
+
+    # Calculate bits
+    bits = int(round(math.log2(alpha_size) * string_length, 0))
+
+    if bits in range(0,40):
+        adjective = 'terribly weak'
+    elif bits in range(41, 68):
+        adjective = 'weak'
+    elif bits in range(69, 80):
+        adjective = 'ok'
+    elif bits in range(81, 100):
+        adjective = 'strong'
+    elif bits in range(101, 160):
+        adjective = 'excellent'
+    elif bits > 160:
+        adjective = 'insanely paranoid'
+
+    return adjective, bits
+
 # Gets a password from the user for settings a password. Makes sure that they wrote correctly
 # by asking two times.
 def getPassword():
@@ -219,7 +260,9 @@ def getPassword():
             break
         else:
             print("ERROR: The passwords did not match. Please try again.\n")
-    print("Passwords match, please remember to save it in your password manager.")
+
+    adjective, bits = evaluatePassword(password)
+    print(f"Passwords match and is {adjective} ({bits} bits). Please remember to save it in your password manager.")
     return password
 
 # Takes a list of Credential objects,

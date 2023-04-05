@@ -21,7 +21,7 @@
 # Note that dates are stored in datetime-objects
 
 from datetime import datetime
-from aux_functions import formatNumber, eprint
+from aux_functions import formatNumber, eprint, saveDictToJson
 from accounting_data import sumIncome, getTransactionDates
 from categories_dictionary import determineConsumptionCommitments
 from sbanken_api import getTotalBalance
@@ -43,7 +43,7 @@ def initializeResults(cats_dict):
 
 # Takes the completed category lists and calculates the sum in and out of the transactions
 # contained in them: for each and also totally. Additionally determines the consumption commitment.
-def calculateResults(cats_dict, accounting_data, settings_dict):
+def calculateResults(cats_dict, accounting_data, settings_dict, credentials):
     results_dict = initializeResults(cats_dict)
 
     cats_dict = results_dict['categories']
@@ -62,11 +62,15 @@ def calculateResults(cats_dict, accounting_data, settings_dict):
     results_dict['sum_out'] = sum([cats_dict[key]['sum_out'] for key in exp_keys])
 
     results_dict['sum_cons_commit'] = determineConsumptionCommitments(cats_dict, settings_dict)
-
-    try:
-        results_dict['total_balance'] = getTotalBalance()
-    except:
-        eprint("Error: Could not get total balance")
+    
+    if len(credentials) > 0:
+        try:
+            results_dict['total_balance'] = getTotalBalance(credentials)
+        except:
+            eprint("Error: Could not get total balance")
+            results_dict['total_balance'] = 0
+    else:
+        eprint("Error: no credentials supplied. Cannot determine total balance. Setting it to 0")
         results_dict['total_balance'] = 0
     try:
         results_dict['nok_mbtc'] = getNOKPrmBTC()
@@ -182,13 +186,6 @@ def printHelp():
     eprint(":~$ py monthly_accounting.py <accounting csv file>\n")
     eprint("Here <accounting csv file> is the path to the file that contains your exported expenses from Sbanken.")
 
-
-# Dumps a dictionary object to a file in the current folder given by filename.
-def saveDictToJson(dictionary, filename):
-    with open(filename, 'w') as file:
-        json.dump(dictionary, file)
-    return
-
 # Assume the path is to a json file containing a json file dump.
 def importOldResults(path):
     with open(path, 'r') as file:
@@ -203,7 +200,7 @@ def importOldResults(path):
 # into isofrmatted strings.
 def saveResults(results_dict, output_fn, silent=False):
     if not silent and os.path.isfile(output_fn):
-        choice = input("Warning: file {output_fn} already exists. Overwrite? (y/n): ")
+        choice = input(f"Warning: file {output_fn} already exists. Overwrite? (y/n): ")
         if not ('y' in choice or 'Y' in choice):
             return
     convertResultDatetimesToStrings(results_dict)

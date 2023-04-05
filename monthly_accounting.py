@@ -1,16 +1,17 @@
 import sys
 import os
 import argparse
-import json
 
-from aux_functions import eprint
+from aux_functions import eprint, loadJsonFile
 from results_dictionary import getSaveFileName, importOldResults, addResults, saveResults, printResults, exportResults, calculateResults, printHelp
 from accounting_data import printIncome, importAndValidateCSV
 from categories_dictionary import categorizeExpenses
 
+from credential_protection import loadCredentials, encryptCredentialsToFile
+
 # Takes the path to a CSV file, checks if the path is valid and then processes the transactions
 # contained in it into a results dictionary
-def importResultsFromCSV(import_path, settings_dict):
+def importResultsFromCSV(import_path, settings_dict, credentials):
 
     import_path = os.path.normpath(import_path)
     # Check if it is a valid file path
@@ -27,7 +28,7 @@ def importResultsFromCSV(import_path, settings_dict):
         print(f"Warning: The file {import_path} still has {len(remainder_list)} uncategorized transactions.")
 
     # Determine Consumption commitments and calculate category sums.
-    results_dict = calculateResults(cats_dict, accounting_data, settings_dict)
+    results_dict = calculateResults(cats_dict, accounting_data, settings_dict, credentials)
 
     return results_dict, accounting_data
 
@@ -37,7 +38,9 @@ def importResultsFromCSV(import_path, settings_dict):
 # into spreadsheet programs.
 def processCSVTransactionsToMonthlyOverview(file_path, settings_dict):
 
-    results_dict, accounting_data = importResultsFromCSV(file_path, settings_dict)
+    credentials = loadCredentials()
+
+    results_dict, accounting_data = importResultsFromCSV(file_path, settings_dict, credentials)
 
     # Print income to console
     print("\nIncome transactions:")
@@ -60,13 +63,20 @@ def advancedUsage(parser, settings_dict):
 
     cli_input = parser.parse_args()
 
+    credentials = loadCredentials()
+
+    # First we encrypt and save credentials, if that was the point of the invocation
+    if cli_input.encrypt:
+        encryptCredentialsToFile(credentials)
+        return
+
     # We start by seeing if an import argument was given
     no_results = False
     import_path = cli_input.imp
     if import_path != '' and import_path != None:
 
         print(f"Importing account information from {import_path}")
-        results_dict, accounting_data = importResultsFromCSV(import_path, settings_dict)
+        results_dict, accounting_data = importResultsFromCSV(import_path, settings_dict, credentials)
 
         # Now we need to determine if there exists a file which the imported statements should be added to.
         save_path = cli_input.save_file
@@ -135,21 +145,6 @@ def advancedUsage(parser, settings_dict):
     
     return
 
-# Function that tries to read a JSON file in the same folder as the script and return that file as a dict.
-# In this program it is used to load the script file
-def loadJsonFile(filename):
-    # Get current script folder path
-    script_folder = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
-    conf_path = script_folder + "/" + filename
-    
-    if os.path.exists(conf_path):
-        with open(conf_path, "r") as f:
-            conf_dict = json.load(f)
-        return conf_dict
-    
-    printHelp()
-    eprint(f"Could not find settings file at: \n{conf_path}")
-    exit(-2)
 
 
 # Parse command-line arguments
@@ -195,6 +190,7 @@ def main(argv):
         parser.add_argument('-i', '--import', metavar='<csv file>', help='Import expenses in %(metavar)s into categories and store them in an output json file named after the month-year (-s can be used to specify this). ', dest='imp')
         parser.add_argument('-p', '--print', action='store_true', help='Looks for a saved json file and only prints output (does not generate pdfs etc.)', dest='pri')
         parser.add_argument('-e', '--export', action='store_true', help='Looks for an already saved json file and outputs the results in this file by creating plot, generating ouput csv file and copying its content to the clipboard.')
+        parser.add_argument('--encrypt', action='store_true', help='Attempts to encrypt credentials stored in cleartext in the credentials folder with a password.')
         parser.add_argument('-s', '--save-file', metavar='<json file-path>', help='Specifies the name of the json-file used to save the results.')
         parser.add_argument('--income', metavar='<csv file>', help='Imports the file in %(metavar)s, but instead of categorizing expenses, prints the income statements contained.')
 

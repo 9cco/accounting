@@ -27,14 +27,34 @@ def getAuthenticatedSession(client_id, client_secret):
 
 
 # Read files to obtain credential information
-def getCredentials(folder_name = "credentials", client_id_fn = "sbanken_clientID.txt", client_secret_fn = "sbanken_secret.txt"):
+#def getCredentials(folder_name = "credentials", client_id_fn = "sbanken_clientID.txt", client_secret_fn = "sbanken_secret.txt"):
+#
+#    dir_path = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
+#    folder_path = f'{dir_path}/{folder_name}'
+#    with open(f'{folder_path}/{client_id_fn}', 'r') as f:
+#        client_id = f.read().strip()
+#    with open(f'{folder_path}/{client_secret_fn}', 'r') as f:
+#        client_secret = f.read().strip()
+#
+#    return client_id, client_secret
 
-    dir_path = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
-    folder_path = f'{dir_path}/{folder_name}'
-    with open(f'{folder_path}/{client_id_fn}', 'r') as f:
-        client_id = f.read().strip()
-    with open(f'{folder_path}/{client_secret_fn}', 'r') as f:
-        client_secret = f.read().strip()
+# Find the correct credential data in the credential list and return it.
+def getCredentials(credentials, client_id_name = "sbanken_clientID", client_secret_name = "sbanken_secret"):
+
+    client_id = None
+    client_secret = None
+    
+    # Find the elements in the credential list containing the wanted credentials.
+    for cred in credentials:
+        if cred.name == client_id_name:
+            client_id = cred.data
+        elif cred.name == client_secret_name:
+            client_secret = cred.data
+
+    # Check that we have found the correct credentials.
+    if client_id == None or client_secret == None:
+        raise Exception(f"Error getCredentials: Needed credentials \n{client_id_name} or {client_secret_name}\n\
+                are not located in loaded credentials.")
 
     return client_id, client_secret
 
@@ -56,10 +76,10 @@ def calculateTotalBalance(response):
     return balance
 
 # Get the total balance on the account given access to by the credentials by calling the Sbanken API
-def getTotalBalance():
+def getTotalBalance(credentials):
 
     # First we read credentials from files in the folder 'credentials'.
-    client_id, client_secret = getCredentials()
+    client_id, client_secret = getCredentials(credentials)
 
     #print(client_id + "\n" + client_secret)
 

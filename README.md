@@ -28,13 +28,16 @@ The script then prints all the results to the console with some nice crushing of
 1. You need to enable Sbanken beta and download your client_id (api-key) and client_secret (password).
 2. Make a new directory in the script folder called **credentials**.
 3. In this folder, place the client_id in a file called **sbanken_clientID.txt** and client_secret in a file called **sbanken_secret.txt**. This can be done, e.g., by issuing the commands
+
         echo "4vjeri549fdsklrgjei596gfdoivj549" > sbanken_api_key.txt
         echo "pekv=IFE4BVIDFDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" > sbanken_secret.txt
 
 #### If you want the credentials encrypted at rest:
 1. Assuming you have performed the actions above so that the credentials are stored in the folder **credentials** in the same folder as the
 script files, do the command
+
         accounting --encrypt
+
 2. The program will ask you to choose a good password. Remember to remember it (preferably using a password manager).
 3. Delete the **credentials** folder.
 

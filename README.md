@@ -24,14 +24,24 @@ The script then prints all the results to the console with some nice crushing of
 2. Edit the settings.conf json file by inserting the number of bitcoins in you possession, what categories you want and what search strings in each category, what categories should be considered consumption commitments, and specify skip regexes if any transactions should be automatically skipped (like internal tranfers between accounts). An example settings file is included in the file `settings.example`. Use this as a starting point and rename it to `settings.conf` when you are done.
 3. Add the line `alias accounting='python3 <path to script folder>/monthly_accounting.py'` to your `.bash_aliases` file (assuming you have the line `. ~/.bash_aliases` somewhere in your `.bashrc` file).
 
-        In order to have the nice API-calls:  
-4. You need to enable Sbanken beta and download your client_id (api-key) and client_secret (password).
-5. Make a new directory in the script folder called **credentials**.
-6. In this folder, place the client_id in a file called **sbanken_clientID.txt** and client_secret in a file called **sbankoen_secret.txt**. This can be done, e.g., by issuing the following commands
-```bash
+### In order to have the nice API-calls:  
+1. You need to enable Sbanken beta and download your client_id (api-key) and client_secret (password).
+2. Make a new directory in the script folder called **credentials**.
+3. In this folder, place the client_id in a file called **sbanken_clientID.txt** and client_secret in a file called **sbanken_secret.txt**. This can be done, e.g., by issuing the commands
+    ```bash
 echo "4vjeri549fdsklrgjei596gfdoivj549" > sbanken_api_key.txt
 echo "pekv=IFE4BVIDFDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" > sbanken_secret.txt
 ```
+
+#### If you want the credentials encrypted at rest:
+1. Assuming you have performed the actions above so that the credentials are stored in the folder **credentials** in the same folder as the
+script files, do the command
+    ```bash
+    accounting --encrypt
+    ```
+2. The program will ask you to choose a good password. Remember to remember it (preferably using a password manager).
+3. Delete the **credentials** folder.
+
 
 ## Use
 

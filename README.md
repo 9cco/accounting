@@ -72,6 +72,9 @@ options:
   -e, --export          Looks for an already saved json file and outputs the results
                         in this file by creating plot, generating ouput csv file and
                         copying its content to the clipboard.
+  --encrypt             Attempts to encrypt credentials stored in cleartext in the credentials folder
+                        with a password. Then saves the encrypted credentials to a file
+                        `api_credentials.json` located in the script folder.
   -s <json file-path>, --save-file <json file-path>
                         Specifies the name of the json-file used to save the results.
   --income <csv file>   Imports the file in <csv file>, but instead of categorizing

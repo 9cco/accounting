@@ -190,7 +190,7 @@ def main(argv):
         parser.add_argument('-i', '--import', metavar='<csv file>', help='Import expenses in %(metavar)s into categories and store them in an output json file named after the month-year (-s can be used to specify this). ', dest='imp')
         parser.add_argument('-p', '--print', action='store_true', help='Looks for a saved json file and only prints output (does not generate pdfs etc.)', dest='pri')
         parser.add_argument('-e', '--export', action='store_true', help='Looks for an already saved json file and outputs the results in this file by creating plot, generating ouput csv file and copying its content to the clipboard.')
-        parser.add_argument('--encrypt', action='store_true', help='Attempts to encrypt credentials stored in cleartext in the credentials folder with a password.')
+        parser.add_argument('--encrypt', action='store_true', help='Attempts to encrypt credentials stored in cleartext in the credentials folder with a password. Then saves the encrypted credentials to a file `api_credentials.json` located in the script folder.')
         parser.add_argument('-s', '--save-file', metavar='<json file-path>', help='Specifies the name of the json-file used to save the results.')
         parser.add_argument('--income', metavar='<csv file>', help='Imports the file in %(metavar)s, but instead of categorizing expenses, prints the income statements contained.')
 

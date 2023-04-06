@@ -6,6 +6,7 @@ import requests
 from requests_oauthlib import OAuth2Session
 import urllib.parse
 
+from credential_protection import loadCredentials
 
 # Use OAuth2 in order to get an authenticated session. The "secret" is also known as "password" in the Sbanken UI.
 def getAuthenticatedSession(client_id, client_secret):
@@ -59,8 +60,8 @@ def getCredentials(credentials, client_id_name = "sbanken_clientID", client_secr
     return client_id, client_secret
 
 # Call the Sbanken Accounts API and obtain an overview of the accounts. Returns json reply.
-def callAccountsAPI(session, account_api_url = 'https://publicapi.sbanken.no/apibeta/api/v2/Accounts'):
-    response_object = session.get(account_api_url)
+def callAPI(session, api_url = 'https://publicapi.sbanken.no/apibeta/api/v2/Accounts'):
+    response_object = session.get(api_url)
     return response_object.json()
 
 # Go through all balances and compute the total. The input is an Sbanken json object
@@ -90,10 +91,15 @@ def getTotalBalance(credentials):
     # Authenticate to the Sbanken API.
     session = getAuthenticatedSession(urlencoded_id, urlencoded_secret)
     # Call the Accounts API endpoint to get account information
-    response = callAccountsAPI(session)
+    response = callAPI(session)
 
     # Sum the balance on the accounts returned.
     total_balance = calculateTotalBalance(response)
+
+    # List cards
+#    card_api_url = "https://publicapi.sbanken.no/apibeta/api/v2/Cards"
+#    response = callAPI(session, api_url = card_api_url)
+#    pprint(response)
 
     return total_balance
 
@@ -102,7 +108,9 @@ def getTotalBalance(credentials):
 # Parse command-line arguments
 def main(argv):
 
-    balance = getTotalBalance()
+    credentials = loadCredentials()
+
+    balance = getTotalBalance(credentials)
     print(round(balance, 2))
     
 

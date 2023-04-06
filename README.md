@@ -29,8 +29,8 @@ The script then prints all the results to the console with some nice crushing of
 2. Make a new directory in the script folder called **credentials**.
 3. In this folder, place the client_id in a file called **sbanken_clientID.txt** and client_secret in a file called **sbanken_secret.txt**. This can be done, e.g., by issuing the commands
 
-        echo "4vjeri549fdsklrgjei596gfdoivj549" > sbanken_api_key.txt
-        echo "pekv=IFE4BVIDFDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" > sbanken_secret.txt
+        echo -n "4vjeri549fdsklrgjei596gfdoivj549" > sbanken_api_key.txt
+        echo -n "pekv=IFE4BVIDFDxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" > sbanken_secret.txt
 
 #### If you want the credentials encrypted at rest:
 1. Assuming you have performed the actions above so that the credentials are stored in the folder **credentials** in the same folder as the

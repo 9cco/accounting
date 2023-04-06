@@ -260,7 +260,7 @@ def writeOutput(results_dict, output_file, settings_dict):
     category_order = settings_dict['write_order']
 
     # Insert date string
-    output_list = [results_dict['date']]
+    output_list = [results_dict['end_date'].strftime('%Y-%m')]
 
     # Insert category sums in correct order
     for category_name in category_order:
